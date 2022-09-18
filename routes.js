@@ -56,6 +56,7 @@ const handlerRoutes = (req, res) => {
     res.setHeader("Location", "/");
     return res.end();
   }
+  console.log(">>>>>>> users", users);
 };
 
 module.exports = handlerRoutes;
