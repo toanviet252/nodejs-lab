@@ -1,11 +1,17 @@
-const http = require("http");
 const express = require("express");
 const app = express();
-app.use("/users", (req, res, next) => {
-  res.send(`<p>The Middleware that handles just /</p>`);
-});
-app.use("/", (req, res, next) => {
-  res.send(`<p>The Middleware that handles just /users</p>`);
-});
+const bodyParser = require("body-parser");
+const path = require("path");
+const mainRouter = require("../lab2.1/routes/index");
+
+// routes
+app.use(
+  bodyParser.urlencoded({
+    extended: false,
+  })
+);
+// Dùng để node.js app lấy được file main.js trong folder public
+app.use(express.static(path.join(__dirname, "public")));
+app.use(mainRouter);
 
 app.listen(3001);
