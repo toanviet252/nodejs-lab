@@ -1,0 +1,25 @@
+.form-control {
+  display: flex;
+  justify-content: center;
+  font-family: "Lato";
+}
+.input-user {
+  padding: 0.5rem;
+  margin-right: 0.5rem;
+  /* width: 25%; */
+}
+.input-user:focus {
+  outline-color: rgb(0, 115, 255);
+}
+.form-control button {
+  font-family: "Lato";
+  cursor: pointer;
+  border: none;
+  background-color: rgb(159, 193, 181);
+  border-radius: 0.2rem;
+}
+.form-control button:hover {
+  background-color: green;
+  color: white;
+  opacity: 0.9;
+}
