@@ -8,11 +8,11 @@ const AddUser = (props) => {
       name: e.target.user.value,
     };
     e.preventDefault();
-    console.log(e.target.user.value);
     axios
       .post("http://localhost:5000/add-user", newUser)
+      .then((res) => props.setUsers(res.data))
       .catch((err) => console.log(err));
-    props.setUsers((pre) => [...pre, newUser]);
+    // props.setUsers((pre) => [...pre, newUser]);
   };
   return (
     <div className="Form-user-container">
