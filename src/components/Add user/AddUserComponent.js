@@ -4,13 +4,15 @@ import axios from "axios";
 
 const AddUser = (props) => {
   const onSubmitForm = (e) => {
+    const newUser = {
+      name: e.target.user.value,
+    };
     e.preventDefault();
     console.log(e.target.user.value);
     axios
-      .post("http://localhost:5000/add-user", {
-        name: e.target.user.value,
-      })
+      .post("http://localhost:5000/add-user", newUser)
       .catch((err) => console.log(err));
+    props.setUsers((pre) => [...pre, newUser]);
   };
   return (
     <div className="Form-user-container">
@@ -20,12 +22,7 @@ const AddUser = (props) => {
         action="/add-user"
         method="POST"
       >
-        <input
-          className="input-user"
-          id="user"
-          //   value={props.users}
-          //   onChange={(e) => setUser(e.target.value)}
-        />
+        <input className="input-user" id="user" />
         <button type="submit" className="btn-add-user">
           Add user
         </button>
