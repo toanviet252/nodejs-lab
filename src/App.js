@@ -1,26 +1,32 @@
 import "./App.css";
 import Header from "./components/header/HeaderComponent";
-import AddUser from "./components/Add user/AddUserComponent";
-import { useEffect, useState } from "react";
+import AddProduct from "./components/AddProduct/AddProduct";
+import { useCallback, useEffect, useState } from "react";
 import { Route, Routes } from "react-router-dom";
-import Users from "./components/Users/UserComponent";
+import Shop from "./components/ShopHome/Shop";
 
 function App() {
-  const [users, setUsers] = useState([]);
-  useEffect(() => {
+  const [products, setProducts] = useState([]);
+  const fetchProducts = useCallback(() => {
     fetch("http://localhost:5000")
       .then((res) => res.json())
-      .then((data) => setUsers(data));
+      .then((data) => setProducts(data));
   }, []);
+
+  useEffect(() => {
+    fetchProducts();
+  }, [fetchProducts]);
 
   return (
     <div className="App">
       <Header />
       <Routes>
-        <Route path="/home" element={<Users users={users} />} />
+        <Route path="/home" element={<Shop products={products} />} />
         <Route
-          path="/add-user"
-          element={<AddUser users={users} setUsers={setUsers} />}
+          path="/admin/add-product"
+          element={
+            <AddProduct products={products} fetchProducts={fetchProducts} />
+          }
         />
       </Routes>
     </div>

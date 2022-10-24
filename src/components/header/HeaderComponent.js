@@ -9,12 +9,32 @@ const Header = () => {
         <ul>
           <li>
             <NavLink className="nav-link" to="/home">
-              User
+              Shop
             </NavLink>
           </li>
           <li>
-            <NavLink className="nav-link" to="/add-user">
-              Enter User
+            <NavLink className="nav-link" to="/a">
+              Products
+            </NavLink>
+          </li>
+          <li>
+            <NavLink className="nav-link" to="/b">
+              Cart
+            </NavLink>
+          </li>
+          <li>
+            <NavLink className="nav-link" to="/c">
+              Order
+            </NavLink>
+          </li>
+          <li>
+            <NavLink className="nav-link" to="/admin/add-product">
+              Add Product
+            </NavLink>
+          </li>
+          <li>
+            <NavLink className="nav-link" to="/d">
+              Admin Product
             </NavLink>
           </li>
         </ul>

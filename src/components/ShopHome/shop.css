@@ -1,0 +1,15 @@
+.home-page-container {
+  margin: 2rem;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.product-container {
+  display: flex;
+  flex-direction: column;
+  width: 200px;
+  height: 300px;
+}
+.prd-image img {
+  width: 100%;
+}

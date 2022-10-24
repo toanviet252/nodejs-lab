@@ -1,17 +1,24 @@
-.form-control {
+.form-container {
+  margin-top: 2rem;
   display: flex;
   justify-content: center;
+}
+
+.form-control {
+  display: flex;
+  flex-direction: column;
+  width: 300px;
   font-family: "Lato";
 }
-.input-user {
+.form-input {
   padding: 0.5rem;
-  margin-right: 0.5rem;
-  /* width: 25%; */
 }
-.input-user:focus {
+.form-input:focus {
   outline-color: rgb(0, 115, 255);
 }
 .form-control button {
+  margin-top: 1rem;
+  padding: 1rem;
   font-family: "Lato";
   cursor: pointer;
   border: none;
@@ -22,4 +29,8 @@
   background-color: green;
   color: white;
   opacity: 0.9;
+}
+.form-control label {
+  display: flex;
+  justify-self: flex-start;
 }
