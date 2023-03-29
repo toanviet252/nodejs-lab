@@ -7,6 +7,7 @@ import jwt from "jsonwebtoken";
 export const signin = async (req, res, next) => {
   validatorRequest(req);
   const email = req.body.email;
+  console.log(email);
   const password = req.body.password;
   try {
     const user = await User.findOne({
@@ -25,7 +26,7 @@ export const signin = async (req, res, next) => {
       },
       process.env.JWT_PRIVATE_KEY,
       {
-        expiresIn: "5m",
+        expiresIn: "1d",
       }
     );
     return res.status(200).json({
@@ -44,7 +45,6 @@ export const signin = async (req, res, next) => {
 };
 
 export const signup = async (req, res, next) => {
-  console.log(req.body);
   const password = req.body.password;
 
   try {
