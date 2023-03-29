@@ -1,3 +1,5 @@
+import { useEffect, useState } from "react";
+import { getAllHotels } from "../../apis/api";
 import Featured from "../../components/featured/Featured";
 import FeaturedProperties from "../../components/featuredProperties/FeaturedProperties";
 import Footer from "../../components/footer/Footer";
@@ -8,18 +10,26 @@ import PropertyList from "../../components/propertyList/PropertyList";
 import "./home.css";
 
 const Home = () => {
+  const [dataHotels, setDataHotels] = useState([]);
+  const fetchData = async () => {
+    const res = await getAllHotels();
+    setDataHotels(res.data.hotels);
+  };
+  useEffect(() => {
+    fetchData();
+  }, []);
   return (
     <div>
       <Navbar />
-      <Header/>
+      <Header />
       <div className="homeContainer">
-        <Featured/>
+        <Featured dataHotels={dataHotels} />
         <h1 className="homeTitle">Browse by property type</h1>
-        <PropertyList/>
+        <PropertyList types={dataHotels.map((i) => i?.type)} />
         <h1 className="homeTitle">Homes guests love</h1>
-        <FeaturedProperties/>
-        <MailList/>
-        <Footer/>
+        <FeaturedProperties topFeatures={dataHotels.slice(0, 3)} />
+        <MailList />
+        <Footer />
       </div>
     </div>
   );

@@ -1,4 +1,4 @@
-import { ReactComponent as SpinIcon } from '../../../public/assets/Spiner.svg';
+import { ReactComponent as SpinIcon } from "../../assets/Spiner.svg";
 
 const LoadingFallback = () => {
   return (

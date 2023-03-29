@@ -1,18 +1,23 @@
-import axios from 'axios';
-import { getToken } from './auth';
+import axios from "axios";
+import { getToken } from "./auth";
 
 const apiInstance = axios.create({
   baseURL: window.appConfig.apiEndPoint,
 });
-apiInstance.interceptors.request.use((config) => {
-  const token = getToken();
-  if (token) {
-    config.headers = {
-      Authorization: 'Bearer ' + token,
-      'Content-Type': 'application/json',
-    };
+apiInstance.interceptors.request.use(
+  (config) => {
+    const token = getToken();
+    if (token) {
+      config.headers = {
+        Authorization: "Bearer " + token,
+        "Content-Type": "application/json",
+      };
+    }
+    return config;
+  },
+  (err) => {
+    return Promise.reject(err);
   }
-  return config;
-});
+);
 
 export default apiInstance;

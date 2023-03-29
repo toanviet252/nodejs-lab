@@ -1,11 +1,18 @@
-import { createContext, useState } from 'react';
+import { createContext, useEffect, useState } from "react";
+import { clearToken } from "../utils/auth";
 
 const AuthContext = createContext();
 const AuthContextProvider = ({ children }) => {
+  useEffect(() => {
+    console.log("run context");
+  }, []);
   const [isAuth, setIsAuth] = useState(false);
   const [userData, setUserData] = useState({});
   const loggedIn = () => setIsAuth(true);
-  const loggedOut = () => setIsAuth(false);
+  const loggedOut = () => {
+    setIsAuth(false);
+    clearToken();
+  };
   const clearUserData = () => setUserData({});
   const value = {
     isAuth,
