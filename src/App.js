@@ -13,6 +13,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCircleExclamation } from "@fortawesome/free-solid-svg-icons";
 import jwtDecode from "jwt-decode";
 import { AuthContext } from "./contexts/AuthContext";
+import BookingTransaction from "./pages/transaction/Transaction";
 
 function App() {
   const navigate = useNavigate();
@@ -33,9 +34,9 @@ function App() {
       clearUserData();
       return navigate("/auth/signin");
     } else {
-      const { fullName, isAdmin, phoneNumber, email } = jwtDecode(token);
+      const { fullName, isAdmin, phoneNumber, email, id } = jwtDecode(token);
       loggedIn();
-      setUserData({ fullName, isAdmin, phoneNumber, email });
+      setUserData({ fullName, isAdmin, phoneNumber, email, id });
     }
   }, []);
   return (
@@ -44,11 +45,12 @@ function App() {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/hotels" element={<List />} />
-        <Route path="/hotels/:id" element={<Hotel />} />
+        <Route path="/hotels/:hotelId" element={<Hotel />} />
         <Route path="/auth/*" element={<AuthComponent />}>
           <Route path="signup" element={<SignUpPage />} />
           <Route path="signin" element={<SigninPage />} />
         </Route>
+        <Route path="/transactions" element={<BookingTransaction />} />
       </Routes>
     </>
   );

@@ -123,6 +123,7 @@ const List = () => {
                 {hotelsData.length > 0 ? (
                   hotelsData.map((item) => (
                     <SearchItem
+                      id={item._id}
                       name={item.name}
                       distance={item.distance}
                       tag={null}

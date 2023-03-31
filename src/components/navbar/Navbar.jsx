@@ -17,12 +17,12 @@ const Navbar = () => {
   };
   const items = [
     {
-      label: <span onClick={handleLogout}>Logout</span>,
-      key: "logout",
+      label: <span onClick={() => navigate("/transactions")}>Your transactions</span>,
+      key: "invoice",
     },
     {
-      label: <span>Your order</span>,
-      key: "invoice",
+      label: <span onClick={handleLogout}>Log out</span>,
+      key: "logout",
     },
   ];
   return (

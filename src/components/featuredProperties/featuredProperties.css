@@ -6,33 +6,36 @@
   gap: 20px;
 }
 
-.fpItem{
+.fpItem {
   flex: 1;
   gap: 10px;
   display: flex;
   flex-direction: column;
 }
 
-.fpImg{
+.fpImg {
   width: 100%;
   height: 250px;
   object-fit: cover;
+  border-radius: 10px;
 }
 
-.fpName{
+.fpName a {
   color: #333;
   font-weight: bold;
 }
-
-.fpCity{
+.fpName a:hover {
+  color: #003580;
+}
+.fpCity {
   font-weight: 300;
 }
 
-.fpPrice{
+.fpPrice {
   font-weight: 500;
 }
 
-.fpRating>button{
+.fpRating > button {
   background-color: #003580;
   color: white;
   border: none;
@@ -41,6 +44,6 @@
   font-weight: bold;
 }
 
-.fpRating>span{
+.fpRating > span {
   font-size: 14px;
 }

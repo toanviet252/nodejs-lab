@@ -8,22 +8,14 @@ const FeaturedProperties = ({ topFeatures }) => {
         topFeatures.map((item, index) => {
           return (
             <div className="fpItem" key={index}>
-              <img
-                src={
-                  item.photos[Math.trunc(Math.random() * item.photos.length)]
-                }
-                alt=""
-                className="fpImg"
-              />
+              <img src={item.photos[Math.trunc(Math.random() * item.photos.length)]} alt="" className="fpImg" />
               <span className="fpName">
-                <a href="./hotels/0" target="_blank">
+                <a href={`./hotels/${item._id}`} target="_blank" rel="noreferrer">
                   {item.name}
                 </a>
               </span>
               <span className="fpCity">{item.city}</span>
-              <span className="fpPrice">
-                Starting from ${item.cheapestPrice}
-              </span>
+              <span className="fpPrice">Starting from ${item.cheapestPrice}</span>
               <div className="fpRating">
                 <button>{item.rating}</button>
                 <span>{item.rating > 9 ? "Excellent" : "Good"}</span>

@@ -19,7 +19,7 @@ const Home = () => {
     fetchData();
   }, []);
   return (
-    <div>
+    <>
       <Navbar />
       <Header />
       <div className="homeContainer">
@@ -28,10 +28,10 @@ const Home = () => {
         <PropertyList types={dataHotels.map((i) => i?.type)} />
         <h1 className="homeTitle">Homes guests love</h1>
         <FeaturedProperties topFeatures={dataHotels.slice(0, 3)} />
-        <MailList />
-        <Footer />
       </div>
-    </div>
+      <MailList />
+      <Footer />
+    </>
   );
 };
 

@@ -1,0 +1,27 @@
+.bookingWrapper {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  border: 1px solid #003580c5;
+  padding: 1rem;
+  border-radius: 0.5rem;
+}
+.booking-title {
+  font-size: 1.2rem;
+  font-weight: 700;
+}
+.room-select-container {
+  width: 100%;
+  margin: 1rem 0;
+}
+.room-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 1rem 0.5rem;
+  font-size: 15px;
+}
+.room-title {
+  font-weight: 500;
+  font-size: 1rem;
+}

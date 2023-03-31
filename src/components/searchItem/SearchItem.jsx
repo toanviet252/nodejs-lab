@@ -1,8 +1,11 @@
+import { useNavigate } from "react-router-dom";
 import "./searchItem.css";
 
-const SearchItem = ({ name, distance, tag, type, description, free_cancel, price, rate, rate_text, img_url }) => {
+const SearchItem = ({ name, distance, tag, type, description, free_cancel, price, rate, rate_text, img_url, id }) => {
+  const navigate = useNavigate();
+  const handleClick = () => navigate(`/hotels/${id}`);
   return (
-    <div className="searchItem">
+    <div className="searchItem" onClick={handleClick} style={{ cursor: "pointer" }}>
       <img src={img_url[0]} alt="" className="siImg" />
       <div className="siDesc">
         <h1 className="siTitle">{name}</h1>

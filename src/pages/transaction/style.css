@@ -1,0 +1,11 @@
+.ant-table table {
+  border-spacing: 0 8px;
+}
+.ant-table-row td:first-child {
+  border-top-left-radius: 10px;
+  border-bottom-left-radius: 10px;
+}
+.ant-table-row td:last-child {
+  border-top-right-radius: 10px;
+  border-bottom-right-radius: 10px;
+}

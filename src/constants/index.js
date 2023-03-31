@@ -57,3 +57,16 @@ export const PropertyTypes = [
     key: "cabin",
   },
 ];
+
+export const initialDate = [
+  {
+    startDate: new Date(),
+    endDate: new Date(),
+    key: "selection",
+  },
+];
+export const initalOptions = {
+  adult: 1,
+  children: 0,
+  room: 1,
+};
