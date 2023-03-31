@@ -17,7 +17,6 @@ export const getAllHotels = async (req, res, next) => {
 // For search
 export const getHotelsWithParams = async (req, res, next) => {
   const { destination, date, options } = req.query;
-  console.log(options);
   try {
     if (!destination && !date && !options)
       return createError("Bad request", 400);
@@ -26,7 +25,6 @@ export const getHotelsWithParams = async (req, res, next) => {
       .toLowerCase()
       .split(" ")
       .join("");
-    // console.log(queryDestionation);
     const hotels = await hotelModel
       .find({
         city: { $regex: new RegExp(queryDestionation, "i") }, //i flag ko phân biệt chữ hoa và chữ  thường
@@ -39,13 +37,27 @@ export const getHotelsWithParams = async (req, res, next) => {
     const result = hotels.filter((hotel) => {
       // chỉ cần khách sạn chứa 1 phòng thoả mãn yêu cầu
       return hotel.rooms.some((room) => {
-        console.log(+room.maxPeople >= +options.room);
         return +room.maxPeople >= +options.room;
       });
     });
     return res.status(200).json({
       message: "OK",
       hotels: result,
+    });
+  } catch (err) {
+    next(errorHandler(err));
+  }
+};
+
+export const getHotel = async (req, res, next) => {
+  const hotelId = req.params.hotelId;
+  try {
+    if (!hotelId) return createError("Bad request, missing hotelId", 400);
+    const hotel = await hotelModel.findOne({ _id: hotelId }).populate("rooms");
+    if (!hotel) return createError("Not found any hotel match with ID", 404);
+    return res.status(200).json({
+      message: "OK",
+      hotel,
     });
   } catch (err) {
     next(errorHandler(err));

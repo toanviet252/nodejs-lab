@@ -4,6 +4,8 @@ import bodyParser from "body-parser";
 import mongoose from "mongoose";
 import authRouter from "./routes/auth";
 import homeRouter from "./routes/home";
+import userRouter from "./routes/user";
+import adminRouter from "./routes/admin";
 
 import path from "path";
 import { fileURLToPath } from "url";
@@ -32,6 +34,10 @@ app.use((req, res, next) => {
 app.use(authRouter);
 
 app.use(homeRouter);
+
+app.use(userRouter);
+
+app.use(adminRouter);
 
 // error handler
 app.use((err, req, res, next) => {

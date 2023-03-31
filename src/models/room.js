@@ -23,5 +23,7 @@ const roomSchema = new Schema({
       type: Schema.Types.UUID,
     },
   ],
+},{
+  timestamps: true
 });
 export default mongoose.model("Room", roomSchema);
