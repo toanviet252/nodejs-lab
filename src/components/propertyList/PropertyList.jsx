@@ -15,7 +15,6 @@ const PropertyList = ({ types }) => {
       });
     });
   }, [types]);
-  // console.log(dataProps);
   return (
     <div className="pList">
       {dataProps.map((item, index) => {

@@ -33,7 +33,6 @@ const Room = () => {
     form.validateFields().then(async (values) => {
       setConfirmLoading(true);
       try {
-        console.log(values);
         if (!isEdit) {
           const res = await addRoom(values);
           await fetchDataRooms();
@@ -41,13 +40,11 @@ const Room = () => {
           setOpen(false);
         } else {
           const res = await updateRoom(roomId, values);
-          // console.log(res);
           await fetchDataRooms();
           message.success(res.data?.message);
           setOpen(false);
         }
       } catch (err) {
-        // console.log(err);
         message.error(err.response.data.message || err.message);
       } finally {
         setConfirmLoading(false);

@@ -55,14 +55,15 @@ const Booking = ({ hotelData }) => {
 
   const handleSubmitForm = () => {
     form.validateFields().then(async (values) => {
-      console.log({ ...values, hotel: hotelData._id, rooms, userId, price });
+      console.log(userId);
       try {
-        const res = await createBooking({ ...values, hotel: hotelData._id, rooms, userId, price });
+        const res = await createBooking({ ...values, hotel: hotelData._id, rooms, user: userId, price });
         if (res.status !== 200) throw new Error("Booked fail");
         message.success("You have successfully booked your hotels");
         return navigate("/transactions");
       } catch (err) {
         console.log(err);
+        message.error(err.response.data.message || err.message);
       }
     });
   };

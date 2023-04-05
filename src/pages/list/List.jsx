@@ -10,6 +10,7 @@ import { DateRange } from "react-date-range";
 import SearchItem from "../../components/searchItem/SearchItem";
 import { searchHotels } from "../../apis/api";
 import LoadingFallback from "../../components/Suspsen/SuspsenFallback";
+import { message } from "antd";
 
 const List = () => {
   const location = useLocation();
@@ -27,7 +28,7 @@ const List = () => {
       setHotelsData(res.data.hotels);
       setLoading(false);
     } catch (err) {
-      console.log(err.response.data.message);
+      message.error(err.response.data.message);
       setLoading(false);
     }
   };
@@ -43,7 +44,6 @@ const List = () => {
       };
     });
   };
-  console.log(options);
   return (
     <div>
       <Navbar />

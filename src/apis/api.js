@@ -25,7 +25,6 @@ export const createBooking = async (body) => {
   return await apiInstance.post("/bookings", body);
 };
 export const getAllBookings = async (userId) => {
-  console.log(userId);
   return await apiInstance.get(`/${userId}/bookings`);
 };
 
@@ -55,7 +54,6 @@ export const getAllTransactions = async () => {
 };
 // Room
 export const getAllRooms = async (params) => {
-  console.log("param", params);
   return await apiInstance.get("admin/rooms", { params });
 };
 export const addRoom = async (body) => {

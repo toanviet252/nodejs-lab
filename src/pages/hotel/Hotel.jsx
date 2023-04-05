@@ -64,7 +64,6 @@ const Hotel = () => {
 
     setSlideNumber(newSlideNumber);
   };
-  // console.log(hotelData);
   return (
     <>
       <Navbar />

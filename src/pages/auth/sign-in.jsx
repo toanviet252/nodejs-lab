@@ -20,12 +20,13 @@ const SigninPage = () => {
       saveToken(res.data.token);
       setUserData(res.data.user);
       loggedIn();
+
       message.success("Logged");
       setLoading(false);
-      navigate("/");
+      const { isAdmin } = res.data.user;
+      isAdmin ? navigate("/admin/dashboard") : navigate("/");
     } catch (err) {
       message.error(err?.response?.data?.message || err.message);
-      console.log(err);
       setLoading(false);
     }
   };

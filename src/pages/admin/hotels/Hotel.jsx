@@ -34,7 +34,6 @@ const Hotel = () => {
 
   const handleAddOrEditHotel = () => {
     form.validateFields().then(async (values) => {
-      console.log(values);
       setConfirmLoading(true);
       const rooms = values.rooms ?? [];
       try {
@@ -51,7 +50,6 @@ const Hotel = () => {
           message.success(res.data.message);
         }
       } catch (err) {
-        console.log(err);
         message.error(err.response?.data?.message || err.message);
       } finally {
         setConfirmLoading(false);
@@ -66,7 +64,6 @@ const Hotel = () => {
   };
   const onEditHotel = (data) => {
     setIsEdit(true);
-    console.log(data);
     const price = +data.price;
     setHotelId(data._id);
     form.setFieldsValue({ ...data, price });
@@ -109,7 +106,6 @@ const Hotel = () => {
       title: "Action",
       key: "action",
       render: (_, record) => {
-        // console.log(record);
         return (
           <Space>
             <button className="action-btn">

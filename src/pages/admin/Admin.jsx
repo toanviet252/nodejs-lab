@@ -16,10 +16,10 @@ export const AdminPage = () => {
   return (
     <>
       <Header />
-      <div style={{ display: "flex", width: "100vw" }}>
+      <div style={{ display: "flex", width: "100%" }}>
         <SidebarMenu />
         <div className="admin-content-container">
-          <Suspense fallback={LoadingFallback}>
+          <Suspense fallback={<LoadingFallback />}>
             <Routes>
               <Route path="/dashboard" element={<Dashboard />} />
               <Route path="/users" element={<User />} />

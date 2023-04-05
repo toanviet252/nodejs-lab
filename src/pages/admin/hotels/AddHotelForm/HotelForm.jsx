@@ -17,7 +17,6 @@ const HotelForm = ({ isEdit, form, open, setOpen, onFinish, confirmLoading, hote
   const fetchRoomsData = useCallback(async () => {
     try {
       const res = await getAllRooms({ hotelId });
-      // console.log(res);
       const data = res.data.data.map((room) => {
         return {
           label: room.title,

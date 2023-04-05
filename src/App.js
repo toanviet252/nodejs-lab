@@ -41,7 +41,9 @@ function App() {
     } else {
       const { fullName, isAdmin, phoneNumber, email, id } = jwtDecode(token);
       loggedIn();
+
       setUserData({ fullName, isAdmin, phoneNumber, email, id });
+      if (isAdmin) return navigate("/admin/dashboard");
     }
   }, []);
   return (
