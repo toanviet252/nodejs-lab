@@ -37,7 +37,7 @@ app.use(homeRouter);
 
 app.use(userRouter);
 
-app.use(adminRouter);
+app.use("/admin", adminRouter);
 
 // error handler
 app.use((err, req, res, next) => {

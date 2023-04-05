@@ -1,5 +1,5 @@
 import jwt from "jsonwebtoken";
-import { createError, errorHandler } from "../utils/errorHandler";
+import { createError, errorHandler } from "../utils/errorhandler";
 
 const isAuth = (req, res, next) => {
   const authHeader = req.get("Authorization");
