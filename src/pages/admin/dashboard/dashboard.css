@@ -1,0 +1,32 @@
+.dashboard-container {
+  padding: 1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.dashboard-item {
+  background-color: white;
+  height: 100px;
+  width: 24%;
+  display: flex;
+  flex-direction: column;
+  border-radius: 5px;
+  box-shadow: 2px 2px 5px 1px rgba(88, 87, 87, 0.35);
+  position: relative;
+}
+.dashboard-item span {
+  font-weight: 500;
+  display: inline-block;
+  padding: 5px;
+}
+.dashboard-item svg {
+  position: absolute;
+  right: 10px;
+  bottom: 10px;
+}
+.table-container {
+  height: fit-content;
+  margin: 1rem;
+  box-shadow: 2px 2px 5px 1px rgba(88, 87, 87, 0.35);
+  padding: 1rem;
+}

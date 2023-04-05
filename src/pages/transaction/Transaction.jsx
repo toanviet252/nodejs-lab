@@ -3,7 +3,7 @@ import Footer from "../../components/footer/Footer";
 import { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../../contexts/AuthContext";
 import { getAllBookings } from "../../apis/api";
-import { Space, Table, Tag } from "antd";
+import { Table, Tag } from "antd";
 import { formatTime } from "../../helpers/formatTime";
 import "./style.css";
 
@@ -33,6 +33,7 @@ const BookingTransaction = () => {
       title: "ID",
       dataIndex: "_id",
       key: "_id",
+      ellipsis: true,
     },
     {
       title: "Hotel",
@@ -48,17 +49,18 @@ const BookingTransaction = () => {
       key: "rooms",
       render: (_, record) => {
         return (
-          <Space>
+          <div style={{ display: "flex", flexDirection: "column", gap: "15px" }}>
             {record.rooms.map((room) => {
               return (
-                <Tag key={room.id} color="#003580">
+                <Tag key={room.id} color="#003580" style={{ width: "fit-content" }}>
                   {room.id.title}/({room.quantity})
                 </Tag>
               );
             })}
-          </Space>
+          </div>
         );
       },
+      width: "200px",
     },
     {
       title: "Date",
@@ -77,6 +79,14 @@ const BookingTransaction = () => {
       key: "price",
     },
     {
+      title: "Payment",
+      dataIndex: "payment",
+      key: "payment",
+      render: (value) => {
+        return <span>{value.charAt(0).toUpperCase() + value.slice(1)}</span>;
+      },
+    },
+    {
       title: "Status",
       dataIndex: "status",
       key: "status",
@@ -88,7 +98,7 @@ const BookingTransaction = () => {
   return (
     <>
       <Navbar />
-      <div className="transaction-container" style={{ minHeight: "50vh", margin: "2rem" }}>
+      <div className="transaction-container" style={{ minHeight: "50vh" }}>
         <h3>Your transactions:</h3>
         <Table dataSource={dataTable} columns={columns} rowKey="id" loading={loading} />
       </div>

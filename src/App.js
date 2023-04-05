@@ -1,9 +1,9 @@
-import { useContext, useEffect } from "react";
+import { useContext, useEffect, lazy, Suspense } from "react";
 import { Routes, Route, useNavigate } from "react-router-dom";
 import AuthComponent from "./pages/auth";
 import SigninPage from "./pages/auth/sign-in";
 import SignUpPage from "./pages/auth/sign-up";
-import Home from "./pages/home/Home";
+// import Home from "./pages/home/Home";
 import Hotel from "./pages/hotel/Hotel";
 import List from "./pages/list/List";
 import jwt from "jwt-decode";
@@ -14,6 +14,11 @@ import { faCircleExclamation } from "@fortawesome/free-solid-svg-icons";
 import jwtDecode from "jwt-decode";
 import { AuthContext } from "./contexts/AuthContext";
 import BookingTransaction from "./pages/transaction/Transaction";
+import { AdminPage } from "./pages/admin/Admin";
+import LoadingFallback from "./components/Suspsen/SuspsenFallback";
+import "./index.css";
+
+const Home = lazy(() => import("./pages/home/Home"));
 
 function App() {
   const navigate = useNavigate();
@@ -42,16 +47,20 @@ function App() {
   return (
     <>
       {contextHolder}
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/hotels" element={<List />} />
-        <Route path="/hotels/:hotelId" element={<Hotel />} />
-        <Route path="/auth/*" element={<AuthComponent />}>
-          <Route path="signup" element={<SignUpPage />} />
-          <Route path="signin" element={<SigninPage />} />
-        </Route>
-        <Route path="/transactions" element={<BookingTransaction />} />
-      </Routes>
+      <Suspense fallback={<LoadingFallback />}>
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/hotels" element={<List />} />
+          <Route path="/hotels/:hotelId" element={<Hotel />} />
+          <Route path="/auth/*" element={<AuthComponent />}>
+            <Route path="signup" element={<SignUpPage />} />
+            <Route path="signin" element={<SigninPage />} />
+          </Route>
+          <Route path="/transactions" element={<BookingTransaction />} />
+          {/* Admin  Routes*/}
+          <Route path="/admin/*" element={<AdminPage />} />
+        </Routes>
+      </Suspense>
     </>
   );
 }

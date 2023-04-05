@@ -1,0 +1,45 @@
+.admin-header {
+  position: sticky;
+  top: 0;
+  border-bottom: 1px solid rgba(148, 148, 148, 0.297);
+  z-index: 999;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #003580;
+  color: white;
+}
+.admin-header > .logo {
+  display: inline-block;
+  width: 200px;
+  text-align: center;
+  height: 100%;
+  padding: 1rem 0;
+  border-right: 1px solid rgba(148, 148, 148, 0.297);
+}
+.admin-sidebar {
+  height: 100vh;
+  position: fixed;
+  top: 0;
+  padding-top: 55px;
+  min-width: 200px;
+  border-right: 1px solid rgba(148, 148, 148, 0.297);
+}
+.admin-content-container {
+  height: calc(100vh - 55px);
+  width: 100%;
+  margin-left: 200px;
+  padding: 1rem;
+}
+.user-holder {
+  margin-right: 2rem;
+}
+.action-btn {
+  border: none;
+  background-color: transparent;
+  cursor: pointer;
+  color: #003580;
+}
+.action-btn svg:hover {
+  color: #0150bf;
+}

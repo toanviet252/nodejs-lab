@@ -1,0 +1,12 @@
+.hotel-modal-container {
+  width: 80vw !important;
+}
+.hotel-form-container {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+}
+.left-form-container,
+.right-form-container {
+  width: 45%;
+}

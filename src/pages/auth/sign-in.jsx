@@ -24,7 +24,7 @@ const SigninPage = () => {
       setLoading(false);
       navigate("/");
     } catch (err) {
-      message.error(err.response.data.message);
+      message.error(err?.response?.data?.message || err.message);
       console.log(err);
       setLoading(false);
     }
@@ -51,11 +51,7 @@ const SigninPage = () => {
         <Form.Item label="Email" name="email" rules={[{ required: true }]}>
           <Input prefix={<FontAwesomeIcon icon={faEnvelope} />} />
         </Form.Item>
-        <Form.Item
-          label="Password"
-          name="password"
-          rules={[{ required: true }]}
-        >
+        <Form.Item label="Password" name="password" rules={[{ required: true }]}>
           <Input.Password prefix={<FontAwesomeIcon icon={faLock} />} />
         </Form.Item>
         <Button type="primary" htmlType="submit" loading={loading}>

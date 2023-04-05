@@ -8,10 +8,11 @@ const Featured = ({ dataHotels }) => {
   const navigate = useNavigate();
   useEffect(() => {
     const cityArr = dataHotels.map((i) => i.city);
-
     setFeatureData((pre) => {
       return pre.map((item) => {
-        const properties = cityArr.filter((name) => item.name.toLowerCase().split(" ").join("") === name).length;
+        const properties = cityArr.filter(
+          (name) => item.name.toLowerCase().split(" ").join("") === name.toLowerCase().split(" ").join("")
+        ).length;
         return {
           ...item,
           properties,
