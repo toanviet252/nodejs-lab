@@ -14,6 +14,7 @@ const isAuth = (req, res, next) => {
     next(errorHandler(err));
   }
   if (!decodeToken) return createError("Not authenticated", 401);
+  req.isAdmin = decodeToken.isAdmin;
   next();
 };
 

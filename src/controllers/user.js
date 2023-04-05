@@ -6,6 +6,7 @@ import validatorRequest from "../utils/validator";
 
 export const getAllBookings = async (req, res, next) => {
   const userId = req.params.userId;
+  // console.log(userId);
   try {
     if (!userId) return createError("User ID is required", 400);
     const user = await userModel.findOne({ _id: userId });
@@ -27,7 +28,7 @@ export const createBooking = async (req, res, next) => {
   try {
     validatorRequest(req);
     const {
-      userId,
+      user,
       hotel,
       price,
       paymentMethod,
@@ -36,11 +37,12 @@ export const createBooking = async (req, res, next) => {
       identityCardNumber,
       rooms,
     } = req.body;
+    console.log("booking", user);
     const roomsData = rooms.map((room) => {
       return { id: room._id, quantity: room.quantity };
     });
     const transaction = new transactionModel({
-      user: userId,
+      user,
       hotel: hotel,
       price: price,
       dateStart: dateOrder.startDate,

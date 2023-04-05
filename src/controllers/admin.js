@@ -72,7 +72,8 @@ export const createHotel = async (req, res, next) => {
       break;
     }
     const data = req.body;
-    const hotel = new hotelModel({ ...data, rating: 0 });
+    const city = data.city.replaceAll(" ", "");
+    const hotel = new hotelModel({ ...data, rating: 0, city });
     await hotel.save();
     return res.status(201).json({
       message: "Created",
@@ -99,7 +100,6 @@ export const updateHotel = async (req, res, next) => {
 export const deleteHotel = async (req, res, next) => {
   try {
     const hotelId = req.params.hotelId;
-    console.log(hotelId);
     const exist = await hotelModel.findById(hotelId);
     if (!exist) return createError("Not found any hotel", 404);
     // kiểm tra khách sạn có đang được đặt hay ko
@@ -108,7 +108,6 @@ export const deleteHotel = async (req, res, next) => {
       return createError("Hotel is already booked. Cannot delete!", 403);
     }
     const deleteHotel = await hotelModel.findByIdAndDelete(hotelId);
-    console.log(deleteHotel);
     // Xóa các room related với hotel
     const deleteArrayRooms = deleteHotel.rooms;
     for (let i = 0; i < deleteArrayRooms.length; i++) {
@@ -149,7 +148,6 @@ export const getAllTransactions = async (req, res, next) => {
 // Room controller
 export const getAllRooms = async (req, res, next) => {
   const hotelId = req.query.hotelId;
-  // console.log("hotel ID", hotelId);
   let rooms;
   try {
     if (hotelId) {
@@ -171,7 +169,6 @@ export const createRoom = async (req, res, next) => {
     validatorRequest(req);
     const data = req.body;
     const { hotel } = data;
-    console.log(hotel);
     const newRoom = new roomModel(data);
     // Add room to related hotel
     const queryHotel = await hotelModel.findById(hotel);
@@ -191,7 +188,7 @@ export const updateRoom = async (req, res, next) => {
   const updateData = req.body;
   const roomId = req.params.roomId;
   const hotelId = updateData.hotel;
-  console.log("request ID", roomId, hotelId);
+  // console.log("request ID", roomId, hotelId);
   try {
     validatorRequest(req);
     const room = await roomModel.findById(roomId);
@@ -200,9 +197,7 @@ export const updateRoom = async (req, res, next) => {
 
     // Update related hotel if change the hotel record
     const originalHotelId = room.hotel;
-    console.log("origin", originalHotelId.toString(), "newhotel", hotelId);
     if (originalHotelId.toString() !== hotelId) {
-      console.log("run changing hotel");
       //Pull the room from previous hotel
       await hotelModel.findByIdAndUpdate(
         originalHotelId,
@@ -238,6 +233,17 @@ export const deleteRoom = async (req, res, next) => {
       session.endSession();
       return createError("Not found any room", 404);
     }
+    // check if room is booking or not
+    const orderRoom = await transactionModel.findOne({
+      rooms: { $elemMatch: { id: roomId } },
+    });
+    // console.log(orderRoom);
+    if (orderRoom && orderRoom.status === "Booked") {
+      const err = new Error("Room is already booked. Cannot delete!");
+      err.statusCode = 403;
+      throw err;
+    }
+
     const deleteRoom = await roomModel
       .findByIdAndDelete(roomId)
       .session(session);

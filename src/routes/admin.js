@@ -14,20 +14,23 @@ import {
 } from "../controllers/admin";
 import isAuth from "../middlewares/isAuth";
 import { body } from "express-validator";
+import { isAdmin } from "../middlewares/isAdmin";
 
 const router = express.Router();
 
-router.get("/dashboard", isAuth, getLastestTransaction);
+router.get("/dashboard", isAuth, isAdmin, getLastestTransaction);
 
 // Hotel
-router.get("/hotels", isAuth, getAllHotels);
+router.get("/hotels", isAuth, isAdmin, getAllHotels);
 router.post(
   "/hotels",
   isAuth,
+  isAdmin,
   [
     body(["name", "city", "desc", "type", "address", "title", "cheapestPrice"])
       .notEmpty()
-      .isString(),
+      .isString()
+      .trim(),
     body("featured").notEmpty().isBoolean(),
     body("photos")
       .isArray()
@@ -47,6 +50,7 @@ router.post(
 router.patch(
   "/hotels/:hotelId",
   isAuth,
+  isAdmin,
   [
     body(["name", "city", "desc", "type", "address", "title", "cheapestPrice"])
       .notEmpty()
@@ -67,14 +71,15 @@ router.patch(
   ],
   updateHotel
 );
-router.delete("/hotels/:hotelId", isAuth, deleteHotel);
+router.delete("/hotels/:hotelId", isAuth, isAdmin, deleteHotel);
 
 // Room
-router.get("/rooms", isAuth, getAllRooms);
+router.get("/rooms", isAuth, isAdmin, getAllRooms);
 
 router.post(
   "/rooms",
   isAuth,
+  isAdmin,
   [
     body(["title", "desc", "hotel"]).notEmpty().isString(),
     body(["price", "maxPeople"])
@@ -92,6 +97,7 @@ router.post(
 router.patch(
   "/rooms/:roomId",
   isAuth,
+  isAdmin,
   [
     body(["title", "desc", "hotel"]).notEmpty().isString(),
     body(["price", "maxPeople"])
@@ -106,10 +112,10 @@ router.patch(
   ],
   updateRoom
 );
-router.delete("/rooms/:roomId", isAuth, deleteRoom);
+router.delete("/rooms/:roomId", isAuth, isAdmin, deleteRoom);
 
-router.get("/users", isAuth, getAllUsers);
+router.get("/users", isAuth, isAdmin, getAllUsers);
 
-router.get("/transactions", isAuth, getAllTransactions);
+router.get("/transactions", isAuth, isAdmin, getAllTransactions);
 
 export default router;

@@ -11,6 +11,7 @@ router.post(
   [
     body("email").notEmpty().isEmail().normalizeEmail(),
     body("fullname").notEmpty().trim().isString(),
+    body("user").notEmpty().isString(),
     body("phoneNumber").notEmpty().trim().isString(),
     body("price").notEmpty().isFloat(),
     body("rooms").notEmpty().isArray(),

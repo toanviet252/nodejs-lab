@@ -7,7 +7,7 @@ import jwt from "jsonwebtoken";
 export const signin = async (req, res, next) => {
   validatorRequest(req);
   const email = req.body.email;
-  console.log(email);
+  // console.log(email);
   const password = req.body.password;
   try {
     const user = await User.findOne({
