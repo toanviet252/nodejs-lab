@@ -29,4 +29,4 @@ const ProductSchema = new Schema(
     timestamps: true,
   }
 );
-export default mongoose.model("User", ProductSchema);
+export default mongoose.model("Product", ProductSchema);

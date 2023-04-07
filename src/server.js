@@ -7,7 +7,20 @@ import morgan from "morgan";
 import path from "path";
 import fs from "fs";
 import { fileURLToPath } from "url";
+import session from "express-session";
+// eslint-disable-next-line
+import MongoDBStoreFactory from "connect-mongodb-session";
+const MongoDBStore = MongoDBStoreFactory(session);
+import shopRouter from "./routes/shop";
+
 dotenv.config();
+
+const MONGODB_URI = `mongodb+srv://${process.env.MONGOOSE_USER}:${process.env.MONGOOSE_DB_KEY}@cluster0.aykpcwd.mongodb.net/${process.env.MONGOOSE_COLLECTION}?retryWrites=true&w=majority`;
+
+const store = new MongoDBStore({
+  uri: MONGODB_URI,
+  collection: "session",
+});
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -35,7 +48,18 @@ app.use(morgan("combined", { stream: accessLogStream })); //lưu thành 1 file l
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
-const MONGODB_URI = `mongodb+srv://${process.env.MONGOOSE_USER}:${process.env.MONGOOSE_DB_KEY}@cluster0.aykpcwd.mongodb.net/${process.env.MONGOOSE_COLLECTION}?retryWrites=true&w=majority`;
+app.use(
+  session({
+    secret: process.env.SESSION_KEY,
+    resave: false,
+    saveUninitialized: false,
+    store: store,
+    cookie: {
+      maxAge: 1000 * 60 * 60 * 24 * 3, //3days
+      httpOnly: true,
+    },
+  })
+);
 
 app.use((req, res, next) => {
   res.setHeader("Access-Allow-Control-Origin", "*");
@@ -46,6 +70,8 @@ app.use((req, res, next) => {
   res.setHeader("Access-Allow-Control-Headers", "Content-Type, Authorization");
   next();
 });
+
+app.use(shopRouter);
 
 app.use((err, req, res, next) => {
   console.log(err);
