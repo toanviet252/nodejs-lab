@@ -8,7 +8,6 @@ import path from "path";
 import fs from "fs";
 import { fileURLToPath } from "url";
 import session from "express-session";
-// eslint-disable-next-line
 import MongoDBStoreFactory from "connect-mongodb-session";
 const MongoDBStore = MongoDBStoreFactory(session);
 import shopRouter from "./routes/shop";
@@ -33,7 +32,7 @@ app.use(
   helmet({
     contentSecurityPolicy: {
       directives: {
-        defaultSrc: ["'self'"],
+        defaultSrc: ["'self'", "*"],
         imgSrc: ["'self'", "*"], //load ảnh từ nguồn khác
       },
     },
@@ -62,12 +61,12 @@ app.use(
 );
 
 app.use((req, res, next) => {
-  res.setHeader("Access-Allow-Control-Origin", "*");
+  res.setHeader("Access-Control-Allow-Origin", "*");
   res.setHeader(
-    "Access-Allow-Control-Methods",
+    "Access-Control-Allow-Methods",
     "GET, POST, PUT, PATCH, DELETE"
   );
-  res.setHeader("Access-Allow-Control-Headers", "Content-Type, Authorization");
+  res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
   next();
 });
 
