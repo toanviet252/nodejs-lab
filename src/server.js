@@ -11,6 +11,9 @@ import session from "express-session";
 import MongoDBStoreFactory from "connect-mongodb-session";
 const MongoDBStore = MongoDBStoreFactory(session);
 import shopRouter from "./routes/shop";
+import authRouter from "./routes/auth";
+// import adminRouter from "./routes/admin";
+import userRouter from "./routes/user";
 
 dotenv.config();
 
@@ -70,8 +73,15 @@ app.use((req, res, next) => {
   next();
 });
 
+app.use(authRouter);
+
 app.use(shopRouter);
 
+// app.use(adminRouter);
+
+app.use(userRouter);
+
+// error handler
 app.use((err, req, res, next) => {
   console.log(err);
   const message = err.message;

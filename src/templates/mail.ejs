@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <title>Order</title>
+    <style></style>
+  </head>
+  <body>
+    <p><strong>Xin Chào</strong> <%= username %></p>
+    <p>Bạn đã đặt đơn hàng sau:</p>
+    <table>
+      <tr>
+        <th>Tên sản phẩm</th>
+        <th>Hình ảnh</th>
+        <th>Giá</th>
+        <th>Số lượng</th>
+        <th>Thành tiền</th>
+      </tr>
+      <tr></tr>
+    </table>
+    <p>Thông tin đặt hàng:</p>
+    <p>Người nhận: <%= orderInfor.fullname %></p>
+    <p>Số điện thoại: <%= orderInfor.phoneNumber %></p>
+    <p>Địa chỉ: <%= orderInfor.address %></p>
+    <p>Tổng thanh toán <%= totalPrice %> VNĐ</p>
+  </body>
+</html>

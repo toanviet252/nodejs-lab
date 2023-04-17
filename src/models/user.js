@@ -3,7 +3,7 @@ const Schema = mongoose.Schema;
 
 const UserSchema = new Schema(
   {
-    username: {
+    fullName: {
       type: String,
       required: true,
     },
@@ -33,7 +33,7 @@ const UserSchema = new Schema(
         ref: "Order",
       },
     ],
-    carts: [
+    cart: [
       {
         product: {
           type: Schema.Types.ObjectId,
