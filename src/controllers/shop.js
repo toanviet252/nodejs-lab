@@ -10,6 +10,7 @@ export const getAllProducts = async (req, res, next) => {
   const query = req.url.split("?")[1];
   const params = queryString.parse(query);
   const { category, search } = params;
+  // console.log(category, search);
   try {
     if (category && category !== "all" && !search) {
       products = await productModel.find({ category });
@@ -25,6 +26,7 @@ export const getAllProducts = async (req, res, next) => {
     } else {
       products = await productModel.find();
     }
+    // console.log(products);
     return res.status(200).json({
       message: "OK",
       data: products,

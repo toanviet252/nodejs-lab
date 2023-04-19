@@ -41,7 +41,6 @@ router.post(
     body("totalPrice").isInt(),
     body([
       "orderInfor.fullname",
-
       "orderInfor.phoneNumber",
       "orderInfor.address",
     ])

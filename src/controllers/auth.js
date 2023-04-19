@@ -12,9 +12,9 @@ export const signin = async (req, res, next) => {
     const user = await User.findOne({
       email: email,
     });
-    if (!user) return createError("Email is incorrect", 401);
+    if (!user) return createError("Email is incorrect", 400);
     const matchPass = await bcrypt.compare(password, user.password);
-    if (!matchPass) return createError("Password is incorrect", 401);
+    if (!matchPass) return createError("Password is incorrect", 400);
     const token = jwt.sign(
       {
         email: user.email,

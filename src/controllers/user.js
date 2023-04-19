@@ -4,7 +4,7 @@ import productModel from "../models/product";
 import orderModel from "../models/order";
 import validateRequest from "../helpers/vaidateRequest";
 import { transporter } from "../utils/mailer";
-import fs from "fs";
+// import fs from "fs";
 import ejs from "ejs";
 
 export const getCartData = async (req, res, next) => {
@@ -49,9 +49,9 @@ export const postProductToCart = async (req, res, next) => {
 };
 
 export const updateCartProduct = async (req, res, next) => {
-  const { count, idProduct, idUser } = req.query;
-  if (!count || !idProduct || !idUser) return createError("Bad request", 400);
   try {
+    const { count, idProduct, idUser } = req.query;
+    if (!count || !idProduct || !idUser) return createError("Bad request", 400);
     const user = await userModel.findById(idUser);
 
     if (!user) return createError("Not found user", 404);
