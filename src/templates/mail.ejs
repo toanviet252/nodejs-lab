@@ -2,25 +2,80 @@
 <html lang="vi">
   <head>
     <title>Order</title>
-    <style></style>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,500;0,600;0,700;0,800;1,500;1,600;1,700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      * {
+        font-family: "Open Sans", sans-serif;
+      }
+      .table {
+        border: 1px solid black;
+        margin: 0 auto;
+        /* border-spacing: 0 5px; */
+        border-collapse: collapse;
+      }
+      tbody tr td,
+      thead th {
+        border-bottom: 1px solid black;
+      }
+
+      thead th {
+        padding: 8px;
+        background-color: aliceblue;
+        /* border-radius: 5px; */
+      }
+      td {
+        text-align: center;
+        align-items: center;
+      }
+
+      tbody tr:nth-child(even) {
+        background-color: #fbfafa;
+      }
+      tbody tr:nth-child(odd) {
+        background-color: rgb(233, 230, 230);
+      }
+    </style>
   </head>
   <body>
-    <p><strong>Xin Chào</strong> <%= username %></p>
+    <p><strong>Xin Chào <%= username %>!</strong> </p>
     <p>Bạn đã đặt đơn hàng sau:</p>
     <table>
-      <tr>
-        <th>Tên sản phẩm</th>
-        <th>Hình ảnh</th>
-        <th>Giá</th>
-        <th>Số lượng</th>
-        <th>Thành tiền</th>
+      <thead>
+        <tr>
+          <th>Tên sản phẩm</th>
+          <th>Hình ảnh</th>
+          <th>Giá (VNĐ)</th>
+          <th>Số lượng</th>
+          <th>Thành tiền (VNĐ)</th>
+        </tr>
+        <tr>
+      </thead>
+      <tbody>
+        <% products.forEach(item => { %>
+          <tr>
+            <td><%= item.product.name %></td>
+            <td>
+              <img
+                src="<%= item.product.photos[0] %>"
+                width="100px"
+              />
+            </td>
+            <td><%= item.product.price.toLocaleString() %></td>
+            <td><%= item.quantity %></td>
+            <td><%= (item.product.price*item.quantity).toLocaleString() %></td>
+          </tr>
+        <% }) %>
+      </tbody>
+      
       </tr>
-      <tr></tr>
     </table>
-    <p>Thông tin đặt hàng:</p>
-    <p>Người nhận: <%= orderInfor.fullname %></p>
-    <p>Số điện thoại: <%= orderInfor.phoneNumber %></p>
-    <p>Địa chỉ: <%= orderInfor.address %></p>
-    <p>Tổng thanh toán <%= totalPrice %> VNĐ</p>
+    <p style="font-weight: bold; font-size: 15px;">Thông tin đặt hàng</p>
+    <p><strong>Người nhận: </strong><%= orderInfor.fullname %></p>
+    <p><strong>Số điện thoại: </strong><%= orderInfor.phoneNumber %></p>
+    <p><strong>Địa chỉ: </strong><%= orderInfor.address %></p>
+    <p style="font-weight: bold; font-size: 15px;">Tổng thanh toán <%= totalPrice %> VNĐ</p>
   </body>
 </html>

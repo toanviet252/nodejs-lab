@@ -88,38 +88,82 @@ export const deleteCartProduct = async (req, res, next) => {
     next(errorHandler(err));
   }
 };
-
+/* eslint-disable no-unused-vars */
 export const checkout = async (req, res, next) => {
   const checkoutData = req.body;
-  console.log(checkoutData);
   try {
     validateRequest(req);
-    const { userOrder } = checkoutData;
+    const { userOrder, products, orderInfor } = checkoutData;
+    console.log(products);
     const user = await userModel.findById(userOrder);
     if (!user) return createError("Not found user", 404);
-    const newOrder = new orderModel({ ...checkoutData, status: "Orderd" });
+    const newOrder = new orderModel({
+      ...checkoutData,
+      status: "Waiting for pay",
+    });
     await newOrder.save();
-    // add order to user's order
+    // add order to user's order and remove all product in user's cart
     user.orders.push(newOrder._id);
+    user.cart = [];
     await user.save();
 
     const tempalte = await ejs.renderFile("./src/templates/mail.ejs", {
       orderInfor: checkoutData.orderInfor,
       username: user.fullName,
       totalPrice: checkoutData.totalPrice.toLocaleString(),
+      products,
     });
-    console.log(tempalte);
+
+    // đính kèm file hoặc ảnh trong email
+    // const attachments = products.map((item) => ({
+    //   filename: `${item.product.name}.jpeg`,
+    //   path: item.product.photos[0],
+    //   cid: item.product.photos[0],
+    // }));
+    // console.log(tempalte);
+    // console.log(attachments);
 
     // send Email
-    transporter.sendMail({
+    await transporter.sendMail({
       from: "toankvfx17375@funix.edu.vn",
       to: user.email,
       subject: "Bạn đã đặt một đơn hàng",
       html: tempalte,
+      // attachments,
     });
 
     return res.status(200).json({
       message: "Order success.",
+    });
+  } catch (err) {
+    next(errorHandler(err));
+  }
+};
+
+export const getAllOrderHistory = async (req, res, next) => {
+  const { idUser } = req.query;
+  try {
+    const allOrderList = await orderModel.find({ userOrder: idUser });
+    if (!allOrderList) return createError("Not found any order", 404);
+    return res.status(200).json({
+      message: "OK",
+      data: allOrderList,
+    });
+  } catch (err) {
+    next(errorHandler(err));
+  }
+};
+
+export const getOrder = async (req, res, next) => {
+  try {
+    const orderId = req.params?.orderId;
+    if (!orderId) return createError("Not found order ID", 400);
+    const order = await orderModel
+      .findById(orderId)
+      .populate("products.product");
+    if (!order) return createError("Not found order", 404);
+    return res.status(200).json({
+      data: order,
     });
   } catch (err) {
     next(errorHandler(err));

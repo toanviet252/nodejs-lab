@@ -5,6 +5,8 @@ import {
   getCartData,
   postProductToCart,
   updateCartProduct,
+  getAllOrderHistory,
+  getOrder,
 } from "../controllers/user";
 import { isAuth } from "../middlewares/isAuth";
 import { body } from "express-validator";
@@ -19,6 +21,9 @@ router.patch("/carts/update", isAuth, updateCartProduct);
 
 router.delete("/carts/delete", isAuth, deleteCartProduct);
 
+router.get("/histories", isAuth, getAllOrderHistory);
+router.get("/histories/:orderId", isAuth, getOrder);
+
 router.post(
   "/checkout",
   [
@@ -27,8 +32,8 @@ router.post(
       .custom((products) => {
         for (let i = 0; i < products.length; i++) {
           const item = products[i];
-          if (typeof item.product !== "string")
-            throw new Error("productId must be a string");
+          if (Object.keys(item.product)?.length < 0)
+            throw new Error("Product cant not be empty");
           if (!Number.isInteger(item.quantity) || item.quantity < 0)
             throw new Error(
               "Quantity must be an integer number and greater than 0"
