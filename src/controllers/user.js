@@ -31,6 +31,10 @@ export const postProductToCart = async (req, res, next) => {
     if (!user) return createError("Not found user", 404);
     const product = await productModel.findById(idProduct);
     if (!product) return createError("Not found product", 404);
+
+    // check the quantiy of product > count?
+    if (count > product.count)
+      return createError("There are not enough products in store", 400);
     // Push product to cart's user
     const existProductIndex = user.cart.findIndex(
       (item) => item.product.toString() === idProduct
@@ -53,8 +57,13 @@ export const updateCartProduct = async (req, res, next) => {
     const { count, idProduct, idUser } = req.query;
     if (!count || !idProduct || !idUser) return createError("Bad request", 400);
     const user = await userModel.findById(idUser);
-
     if (!user) return createError("Not found user", 404);
+
+    const product = productModel.findById(idProduct);
+    if (!product) return createError("Not found product", 404);
+    if (count > product.count)
+      return createError("There are not enough products in store", 400);
+
     const updateProductIndex = user.cart.findIndex(
       (item) => item.product.toString() === idProduct
     );
@@ -97,6 +106,10 @@ export const checkout = async (req, res, next) => {
     console.log(products);
     const user = await userModel.findById(userOrder);
     if (!user) return createError("Not found user", 404);
+
+    // check amount of product
+    // console.log(object);
+
     const newOrder = new orderModel({
       ...checkoutData,
       status: "Waiting for pay",
@@ -108,7 +121,7 @@ export const checkout = async (req, res, next) => {
     await user.save();
 
     const tempalte = await ejs.renderFile("./src/templates/mail.ejs", {
-      orderInfor: checkoutData.orderInfor,
+      orderInfor,
       username: user.fullName,
       totalPrice: checkoutData.totalPrice.toLocaleString(),
       products,
