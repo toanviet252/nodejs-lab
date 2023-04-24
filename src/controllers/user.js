@@ -59,8 +59,9 @@ export const updateCartProduct = async (req, res, next) => {
     const user = await userModel.findById(idUser);
     if (!user) return createError("Not found user", 404);
 
-    const product = productModel.findById(idProduct);
+    const product = await productModel.findById(idProduct);
     if (!product) return createError("Not found product", 404);
+    console.log("count", count, "prd count", product.count);
     if (count > product.count)
       return createError("There are not enough products in store", 400);
 
@@ -103,11 +104,23 @@ export const checkout = async (req, res, next) => {
   try {
     validateRequest(req);
     const { userOrder, products, orderInfor } = checkoutData;
-    console.log(products);
+    // console.log(products);
     const user = await userModel.findById(userOrder);
     if (!user) return createError("Not found user", 404);
 
     // check amount of product
+    for (let i = 0; i < products.length; i++) {
+      const element = products[i];
+      const id = element.product._id;
+      const count = element.quantity;
+      const product = await productModel.findById(id);
+      if (!product) return createError(`Not fount product ${id}`, 404);
+      if (count > product.count)
+        return createError("There are not enough products in store", 400);
+      // decrease count of product
+      product.count = product.count - count;
+      product.save();
+    }
     // console.log(object);
 
     const newOrder = new orderModel({

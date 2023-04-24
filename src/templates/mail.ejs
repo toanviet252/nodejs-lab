@@ -63,7 +63,7 @@
                 width="100px"
               />
             </td>
-            <td><%= item.product.price.toLocaleString() %></td>
+            <td><%= (+item.product.price).toLocaleString() %></td>
             <td><%= item.quantity %></td>
             <td><%= (item.product.price*item.quantity).toLocaleString() %></td>
           </tr>
