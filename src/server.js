@@ -82,6 +82,7 @@ app.use(shopRouter);
 app.use(userRouter);
 
 // error handler
+// eslint-disable-next-line
 app.use((err, req, res, next) => {
   console.log(err);
   const message = err.message;
