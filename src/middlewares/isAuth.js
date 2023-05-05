@@ -16,6 +16,7 @@ export const isAuth = (req, res, next) => {
       return createError(err.message, 401);
     } else {
       // console.log(decode);
+      req.user = decode;
       next();
     }
   });

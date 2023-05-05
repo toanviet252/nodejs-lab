@@ -4,11 +4,25 @@ import { createError, errorHandler } from "../helpers/errorHandler";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 
-export const signin = async (req, res, next) => {
-  validatorRequest(req);
-  const email = req.body.email;
-  const password = req.body.password;
+export const whoAmI = async (req, res, next) => {
   try {
+    const user = req.user;
+    const { id } = user;
+    const data = await User.findById(id).select("-password");
+    if (!data) return createError("Not found user", 404);
+    return res.status(200).json({
+      data,
+    });
+  } catch (err) {
+    next(errorHandler(err));
+  }
+};
+
+export const signin = async (req, res, next) => {
+  try {
+    validatorRequest(req);
+    const email = req.body.email;
+    const password = req.body.password;
     const user = await User.findOne({
       email: email,
     });
@@ -39,7 +53,7 @@ export const signin = async (req, res, next) => {
       user: {
         email: user.email,
         fullName: user.fullName,
-        isAdmin: user.isAdmin,
+        role: user.role,
         _id: user._id,
       },
     });
@@ -60,7 +74,7 @@ export const signup = async (req, res, next) => {
       password: hashPassword,
       orders: [],
       cart: [],
-      role: "user",
+      role: signUpData.role ?? "user",
     });
     await newUser.save();
     return res.status(201).json({

@@ -9,11 +9,13 @@ import fs from "fs";
 import { fileURLToPath } from "url";
 import session from "express-session";
 import MongoDBStoreFactory from "connect-mongodb-session";
-const MongoDBStore = MongoDBStoreFactory(session);
-import shopRouter from "./routes/shop";
 import authRouter from "./routes/auth";
-// import adminRouter from "./routes/admin";
+import adminRouter from "./routes/admin";
 import userRouter from "./routes/user";
+import shopRouter from "./routes/shop";
+import multer from "multer";
+
+const MongoDBStore = MongoDBStoreFactory(session);
 
 dotenv.config();
 
@@ -77,7 +79,7 @@ app.use(authRouter);
 
 app.use(shopRouter);
 
-// app.use(adminRouter);
+app.use("/admin", adminRouter);
 
 app.use(userRouter);
 

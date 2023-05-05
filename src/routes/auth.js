@@ -1,9 +1,12 @@
 import express from "express";
-import { signin, signup } from "../controllers/auth";
+import { signin, signup, whoAmI } from "../controllers/auth";
 import { body } from "express-validator";
 import userModel from "../models/user";
+import { isAuth } from "../middlewares/isAuth";
 
 const router = express.Router();
+
+router.get("/me", isAuth, whoAmI);
 
 router.post(
   "/signin",
@@ -24,10 +27,7 @@ router.post(
         }
         return true;
       }),
-    body(["fullName", "password", "phoneNumber", "address"])
-      .notEmpty()
-      .trim()
-      .isString(),
+    body(["fullName", "password", "phoneNumber"]).notEmpty().trim().isString(),
     body("password")
       .isLength({ min: 5 })
       .withMessage("Password must be at least 5 character"),
