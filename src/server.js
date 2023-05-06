@@ -33,6 +33,23 @@ const app = express();
 
 const PORT = process.env.PORT || 5000;
 
+// multer setup
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, "images/");
+  },
+  filename: (req, file, cb) => {
+    cb(null, Date.now() + "-" + file.originalname);
+  },
+});
+const fileFilter = (req, file, cb) => {
+  console.log("file", file);
+  if (!file.originalname.match(/\.(jpg|jpeg|png|gif)$/)) {
+    console.log("run");
+    return cb(new Error("Only accept image files"), false);
+  }
+  cb(null, true);
+};
 app.use(
   helmet({
     contentSecurityPolicy: {
@@ -64,6 +81,8 @@ app.use(
     },
   })
 );
+
+app.use(multer({ storage, fileFilter }).array("images", 20)); //max photos is 20
 
 app.use((req, res, next) => {
   res.setHeader("Access-Control-Allow-Origin", "*");

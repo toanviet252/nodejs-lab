@@ -6,7 +6,6 @@ import orderModel from "../models/order";
 
 export const getDashboarData = async (req, res, next) => {
   try {
-    // return createError("aaa", 402);
     const users = await userModel.find();
     const orders = await orderModel.find().sort({ createdAt: -1 });
     const totalEarning = orders
@@ -59,13 +58,15 @@ export const getProduct = async (req, res, next) => {
 
 export const createProduct = async (req, res, next) => {
   try {
-    validateRequest(req);
+    // validateRequest(req);
     const productData = req.body;
-    const newProduct = new productModel(productData);
-    await newProduct.save();
-    return res.status(201).json({
-      message: "Product created",
-    });
+    console.log(productData);
+    console.log(req.file);
+    // const newProduct = new productModel(productData);
+    // await newProduct.save();
+    // return res.status(201).json({
+    //   message: "Product created",
+    // });
   } catch (err) {
     next(errorHandler(err));
   }
