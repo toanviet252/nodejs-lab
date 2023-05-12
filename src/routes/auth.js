@@ -1,5 +1,5 @@
 import express from "express";
-import { signin, signup, whoAmI } from "../controllers/auth";
+import { signin, signout, signup, whoAmI } from "../controllers/auth";
 import { body } from "express-validator";
 import userModel from "../models/user";
 import { isAuth } from "../middlewares/isAuth";
@@ -39,5 +39,7 @@ router.post(
   ],
   signup
 );
+
+router.post("/signout", signout);
 
 export default router;

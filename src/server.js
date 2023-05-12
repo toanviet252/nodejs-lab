@@ -14,6 +14,9 @@ import adminRouter from "./routes/admin";
 import userRouter from "./routes/user";
 import shopRouter from "./routes/shop";
 import multer from "multer";
+import http from "http";
+
+import { ioInit } from "./utils/socket";
 
 const MongoDBStore = MongoDBStoreFactory(session);
 
@@ -33,23 +36,37 @@ const app = express();
 
 const PORT = process.env.PORT || 5000;
 
+// socket
+const server = http.createServer(app);
+ioInit(server).on("connection", (socket) => {
+  console.log("Client connected");
+  socket.on("send_message", (data) => {
+    console.log("emit socket data", data);
+  });
+  socket.on("disconnect", () => {
+    console.log("user disconnected");
+  });
+});
+
 // multer setup
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, "images/");
+    cb(null, "images");
   },
   filename: (req, file, cb) => {
-    cb(null, Date.now() + "-" + file.originalname);
+    cb(null, Date.now() + "-" + file.originalname.replaceAll(" ", ""));
   },
 });
 const fileFilter = (req, file, cb) => {
-  console.log("file", file);
+  // console.log("file", file);
   if (!file.originalname.match(/\.(jpg|jpeg|png|gif)$/)) {
-    console.log("run");
-    return cb(new Error("Only accept image files"), false);
+    const error = new Error("Only accept image file");
+    error.statusCode = 400;
+    return cb(error, false);
   }
   cb(null, true);
 };
+
 app.use(
   helmet({
     contentSecurityPolicy: {
@@ -68,6 +85,8 @@ app.use(morgan("combined", { stream: accessLogStream })); //lưu thành 1 file l
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
+// serve static image file
+app.use("/images", express.static(path.join(__dirname, "../images")));
 
 app.use(
   session({
@@ -82,8 +101,6 @@ app.use(
   })
 );
 
-app.use(multer({ storage, fileFilter }).array("images", 20)); //max photos is 20
-
 app.use((req, res, next) => {
   res.setHeader("Access-Control-Allow-Origin", "*");
   res.setHeader(
@@ -93,6 +110,8 @@ app.use((req, res, next) => {
   res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
   next();
 });
+
+app.use(multer({ storage, fileFilter }).array("photos", 20)); //max photos is 20
 
 app.use(authRouter);
 
@@ -116,8 +135,9 @@ app.use((err, req, res, next) => {
 mongoose
   .connect(MONGODB_URI)
   .then(() => {
-    app.listen(5000);
-    console.log(`Server is running on PORT ${PORT}, Database connected`);
+    server.listen(PORT, () => {
+      console.log(`Server is running on PORT ${PORT}, Database connected`);
+    });
   })
   .catch((err) => {
     console.log(err);

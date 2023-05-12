@@ -7,6 +7,9 @@ import {
   updateCartProduct,
   getAllOrderHistory,
   getOrder,
+  createNewChatroom,
+  getSessionMessages,
+  postMessage,
 } from "../controllers/user";
 import { isAuth } from "../middlewares/isAuth";
 import { body } from "express-validator";
@@ -57,5 +60,12 @@ router.post(
   isAuth,
   checkout
 );
+
+// chat
+router.get("/chatrooms", isAuth, getSessionMessages);
+
+router.post("/chatrooms", isAuth, createNewChatroom);
+
+router.post("/chatrooms/addMessage", isAuth, postMessage);
 
 export default router;

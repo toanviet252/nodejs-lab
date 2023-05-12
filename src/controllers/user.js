@@ -6,6 +6,10 @@ import validateRequest from "../helpers/vaidateRequest";
 import { transporter } from "../utils/mailer";
 // import fs from "fs";
 import ejs from "ejs";
+import queryString from "querystring";
+import chatroomModel from "../models/chatroom";
+import sessionModel from "../models/session";
+import { getIO } from "../utils/socket";
 
 export const getCartData = async (req, res, next) => {
   try {
@@ -190,6 +194,77 @@ export const getOrder = async (req, res, next) => {
     if (!order) return createError("Not found order", 404);
     return res.status(200).json({
       data: order,
+    });
+  } catch (err) {
+    next(errorHandler(err));
+  }
+};
+
+export const getSessionMessages = async (req, res, next) => {
+  try {
+    const roomId = req.query.roomId;
+    // console.log(roomId);
+    const roomData = await chatroomModel.findById(roomId);
+    if (!roomData) return createError("Not found chatroom", 404);
+    return res.status(200).json({ message: "OK", data: roomData });
+  } catch (err) {
+    next(errorHandler(err));
+  }
+};
+
+export const createNewChatroom = async (req, res, next) => {
+  try {
+    // console.log(req.session);
+    // const userId = req.query.userId;
+    const query = req.url.split("?")[1];
+    const params = queryString.parse(query);
+    const { userId } = params;
+    console.log(userId);
+    const user = await userModel.findById(userId);
+    if (!user) createError("Not found user", 404);
+    // Tạo phòng chat mới
+    const newChatroom = new chatroomModel({
+      user: user._id,
+      messages: [],
+    });
+    await newChatroom.save();
+    // Cập nhật lại chatroom trong sesion
+    const sessionDoc = await sessionModel.findOne({ "session.userId": userId });
+    if (!sessionDoc) return createError("Not found sessionDoc", 404);
+    sessionDoc.session.chatroom = newChatroom._id;
+    await sessionDoc.save();
+
+    return res.status(200).json({
+      data: newChatroom._id,
+    });
+  } catch (err) {
+    next(errorHandler(err));
+  }
+};
+
+export const postMessage = async (req, res, next) => {
+  try {
+    const { message, roomId, is_admin, userId } = req.body;
+
+    const user = await userModel.findById(userId);
+    if (!user) return createError("Not found user", 404);
+    const chatroomDoc = await chatroomModel.findById(roomId);
+    if (!roomId) return createError("Not found roomId", 404);
+    const newMess = {
+      message,
+      sender: {
+        role: user.role,
+        _id: user._id,
+      },
+    };
+    chatroomDoc.messages.push(newMess);
+    await chatroomDoc.save();
+
+    const io = getIO();
+    io.emit("posts", { action: "post_mesage", newMess });
+
+    return res.status(200).json({
+      message: "OK",
     });
   } catch (err) {
     next(errorHandler(err));

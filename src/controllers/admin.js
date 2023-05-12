@@ -3,6 +3,7 @@ import validateRequest from "../helpers/vaidateRequest";
 import productModel from "../models/product";
 import userModel from "../models/user";
 import orderModel from "../models/order";
+import { revertNumber } from "../helpers/revertNumber";
 
 export const getDashboarData = async (req, res, next) => {
   try {
@@ -58,15 +59,18 @@ export const getProduct = async (req, res, next) => {
 
 export const createProduct = async (req, res, next) => {
   try {
-    // validateRequest(req);
+    validateRequest(req);
     const productData = req.body;
-    console.log(productData);
-    console.log(req.file);
-    // const newProduct = new productModel(productData);
-    // await newProduct.save();
-    // return res.status(201).json({
-    //   message: "Product created",
-    // });
+    const price = +productData.price.replaceAll(",", "");
+    const photos = req.files;
+    const imgPath = photos.map((item) => item.path);
+    productData.photos = imgPath;
+
+    const newProduct = new productModel({ ...productData, price });
+    await newProduct.save();
+    return res.status(201).json({
+      message: "Product created",
+    });
   } catch (err) {
     next(errorHandler(err));
   }
@@ -75,14 +79,20 @@ export const createProduct = async (req, res, next) => {
 export const updateProduct = async (req, res, next) => {
   try {
     validateRequest(req);
-    const updateData = req.body;
+    const receivceData = req.body;
+    const price = revertNumber(receivceData.price);
+    console.log(typeof price, price);
     const productId = req.params.productId;
-    const product = productModel.findById(productId);
+    const updateData = { ...receivceData, price };
+
+    const product = await productModel.findById(productId);
+
     if (!product) return createError("Not found product", 404);
-    await product.updateOne({ _id: productId }, updateData);
+
+    await productModel.updateOne({ _id: productId }, updateData);
 
     return res.status(201).json({
-      message: "updated",
+      message: "Updated",
     });
   } catch (err) {
     next(errorHandler(err));

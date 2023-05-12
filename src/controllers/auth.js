@@ -3,6 +3,7 @@ import User from "../models/user.js";
 import { createError, errorHandler } from "../helpers/errorHandler";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
+import chatroomModel from "../models/chatroom";
 
 export const whoAmI = async (req, res, next) => {
   try {
@@ -44,7 +45,17 @@ export const signin = async (req, res, next) => {
     );
     // session for each user
     req.session.isLoggedIn = true;
-    req.session.user = user;
+    req.session.user = user._id;
+    // create a room for chat
+    const newChatroom = new chatroomModel({
+      user: user._id,
+      messages: [],
+    });
+    await newChatroom.save();
+
+    // console.log(newChatroom);
+
+    req.session.chatroom = newChatroom._id;
     await req.session.save();
 
     return res.status(200).json({
@@ -56,6 +67,7 @@ export const signin = async (req, res, next) => {
         role: user.role,
         _id: user._id,
       },
+      roomId: req.session.chatroom._id,
     });
   } catch (err) {
     next(errorHandler(err));
@@ -86,8 +98,9 @@ export const signup = async (req, res, next) => {
 };
 
 export const signout = async (req, res, next) => {
+  console.log("signout");
   try {
-    await req.session.destroy();
+    await req.session.destroy(); //delete session document in moongoose
     return res.status(200).json(true);
   } catch (err) {
     next(errorHandler(err));
