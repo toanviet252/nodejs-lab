@@ -53,8 +53,6 @@ export const signin = async (req, res, next) => {
     });
     await newChatroom.save();
 
-    // console.log(newChatroom);
-
     req.session.chatroom = newChatroom._id;
     await req.session.save();
 
@@ -98,10 +96,50 @@ export const signup = async (req, res, next) => {
 };
 
 export const signout = async (req, res, next) => {
-  console.log("signout");
   try {
     await req.session.destroy(); //delete session document in moongoose
     return res.status(200).json(true);
+  } catch (err) {
+    next(errorHandler(err));
+  }
+};
+
+export const adminSignin = async (req, res, next) => {
+  try {
+    validatorRequest(req);
+    const email = req.body.email;
+    const password = req.body.password;
+    const user = await User.findOne({
+      email: email,
+    });
+    if (!user) return createError("Email is incorrect", 400);
+    const matchPass = await bcrypt.compare(password, user.password);
+    if (!matchPass) return createError("Password is incorrect", 400);
+    if (user.role !== "admin" && user.role !== "moderator")
+      return createError("Forbiden", 403);
+    const token = jwt.sign(
+      {
+        email: user.email,
+        id: user._id.toString(),
+        fullName: user.fullName,
+        isAdmin: user.isAdmin,
+        phoneNumber: user.phoneNumber,
+      },
+      process.env.JWT_PRIVATE_KEY,
+      {
+        expiresIn: "1d",
+      }
+    );
+    return res.status(200).json({
+      token,
+      message: "Logged Success",
+      user: {
+        email: user.email,
+        fullName: user.fullName,
+        role: user.role,
+        _id: user._id,
+      },
+    });
   } catch (err) {
     next(errorHandler(err));
   }

@@ -1,5 +1,11 @@
 import express from "express";
-import { signin, signout, signup, whoAmI } from "../controllers/auth";
+import {
+  adminSignin,
+  signin,
+  signout,
+  signup,
+  whoAmI,
+} from "../controllers/auth";
 import { body } from "express-validator";
 import userModel from "../models/user";
 import { isAuth } from "../middlewares/isAuth";
@@ -12,6 +18,11 @@ router.post(
   "/signin",
   [body("email").notEmpty().isEmail(), body("password").notEmpty().isString()],
   signin
+);
+router.post(
+  "/admin/signin",
+  [body("email").notEmpty().isEmail(), body("password").notEmpty().isString()],
+  adminSignin
 );
 router.post(
   "/signup",

@@ -3,6 +3,7 @@ import validateRequest from "../helpers/vaidateRequest";
 import productModel from "../models/product";
 import userModel from "../models/user";
 import orderModel from "../models/order";
+import chatroomModel from "../models/chatroom";
 import { revertNumber } from "../helpers/revertNumber";
 
 export const getDashboarData = async (req, res, next) => {
@@ -81,7 +82,7 @@ export const updateProduct = async (req, res, next) => {
     validateRequest(req);
     const receivceData = req.body;
     const price = revertNumber(receivceData.price);
-    console.log(typeof price, price);
+  
     const productId = req.params.productId;
     const updateData = { ...receivceData, price };
 
@@ -132,6 +133,40 @@ export const getOrder = async (req, res, next) => {
     if (!order) return createError("Not found order", 404);
     return res.status(200).json({
       data: order,
+    });
+  } catch (err) {
+    next(errorHandler(err));
+  }
+};
+
+// chatrooms
+
+export const getAllChatRooms = async (req, res, next) => {
+  try {
+    // chỉ lấy các rooms có tin nhắn và session mới nhất
+    const allRooms = (
+      await chatroomModel
+        .find()
+        .sort({ createdAt: -1 })
+        .populate({ path: "user", select: "fullName role" })
+    ).filter((room) => room.messages.length > 0);
+    return res.status(200).json({
+      data: allRooms,
+    });
+  } catch (err) {
+    next(errorHandler(err));
+  }
+};
+
+export const getChatroom = async (req, res, next) => {
+  try {
+    const roomId = req.params.roomId;
+
+    const room = await chatroomModel.findById(roomId);
+
+    if (!room) return createError("Not found room match with ID", 404);
+    return res.status(200).json({
+      data: room,
     });
   } catch (err) {
     next(errorHandler(err));

@@ -7,6 +7,10 @@ const sessionSchema = new Schema(
       type: Date,
       required: true,
     },
+    _id: {
+      type: String,
+      required: true,
+    },
     session: {
       cookie: {
         originalMaxAge: {
@@ -56,6 +60,7 @@ const sessionSchema = new Schema(
   },
   {
     timestamps: true,
+    collection: "session",
   }
 );
 

@@ -2,8 +2,10 @@ import express from "express";
 import {
   createProduct,
   deleteProduct,
+  getAllChatRooms,
   getAllOrders,
   getAllProducts,
+  getChatroom,
   getDashboarData,
   getOrder,
   getProduct,
@@ -86,5 +88,10 @@ router.delete("/products/:productId", isAuth, isAdmin, deleteProduct);
 // order
 router.get("/orders", isAuth, isAdmin, getAllOrders);
 router.get("/orders/:orderId", isAuth, isAdmin, getOrder);
+
+// chat
+router.get("/chatrooms", isAuth, isAdmin, getAllChatRooms);
+
+router.get("/chatrooms/:roomId", isAuth, isAdmin, getChatroom);
 
 export default router;

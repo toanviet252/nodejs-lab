@@ -10,6 +10,7 @@ import {
   createNewChatroom,
   getSessionMessages,
   postMessage,
+  deleteChatroom,
 } from "../controllers/user";
 import { isAuth } from "../middlewares/isAuth";
 import { body } from "express-validator";
@@ -67,5 +68,7 @@ router.get("/chatrooms", isAuth, getSessionMessages);
 router.post("/chatrooms", isAuth, createNewChatroom);
 
 router.post("/chatrooms/addMessage", isAuth, postMessage);
+
+router.delete("/chatrooms/:roomId", isAuth, deleteChatroom);
 
 export default router;

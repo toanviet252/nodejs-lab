@@ -203,7 +203,6 @@ export const getOrder = async (req, res, next) => {
 export const getSessionMessages = async (req, res, next) => {
   try {
     const roomId = req.query.roomId;
-    // console.log(roomId);
     const roomData = await chatroomModel.findById(roomId);
     if (!roomData) return createError("Not found chatroom", 404);
     return res.status(200).json({ message: "OK", data: roomData });
@@ -219,7 +218,7 @@ export const createNewChatroom = async (req, res, next) => {
     const query = req.url.split("?")[1];
     const params = queryString.parse(query);
     const { userId } = params;
-    console.log(userId);
+
     const user = await userModel.findById(userId);
     if (!user) createError("Not found user", 404);
     // Tạo phòng chat mới
@@ -228,9 +227,10 @@ export const createNewChatroom = async (req, res, next) => {
       messages: [],
     });
     await newChatroom.save();
+
     // Cập nhật lại chatroom trong sesion
-    const sessionDoc = await sessionModel.findOne({ "session.userId": userId });
-    if (!sessionDoc) return createError("Not found sessionDoc", 404);
+    const sessionDoc = await sessionModel.findOne({ "session.user": userId });
+    if (!sessionDoc) return createError("Not found session", 404);
     sessionDoc.session.chatroom = newChatroom._id;
     await sessionDoc.save();
 
@@ -244,7 +244,7 @@ export const createNewChatroom = async (req, res, next) => {
 
 export const postMessage = async (req, res, next) => {
   try {
-    const { message, roomId, is_admin, userId } = req.body;
+    const { message, roomId, userId } = req.body;
 
     const user = await userModel.findById(userId);
     if (!user) return createError("Not found user", 404);
@@ -259,12 +259,27 @@ export const postMessage = async (req, res, next) => {
     };
     chatroomDoc.messages.push(newMess);
     await chatroomDoc.save();
-
+    await chatroomModel.findById(chatroomDoc._id);
     const io = getIO();
     io.emit("posts", { action: "post_mesage", newMess });
 
     return res.status(200).json({
       message: "OK",
+    });
+  } catch (err) {
+    next(errorHandler(err));
+  }
+};
+
+export const deleteChatroom = async (req, res, next) => {
+  try {
+    const roomId = req.params.roomId;
+    const roomDoc = await chatroomModel.findByIdAndDelete(roomId);
+    if (!roomDoc) return createError("Not found chatroom", 404);
+    const io = getIO();
+    io.emit("posts", { action: "delete_chatroom", roomId });
+    return res.status(200).json({
+      message: "Deleted",
     });
   } catch (err) {
     next(errorHandler(err));
